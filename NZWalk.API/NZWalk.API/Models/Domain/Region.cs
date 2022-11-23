@@ -13,6 +13,6 @@ namespace NZWalk.API.Models.Domain
         public long Population { get; set; }
 
         //Navigation Property
-        public IEnumerable<Walks> Walks { get; set; }
+        public IEnumerable<Walk> Walks { get; set; }
     }
 }

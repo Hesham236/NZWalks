@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using NZWalk.API.Models.Domain;
 using NZWalk.API.Reposaitories;
 
 namespace NZWalk.API.Controllers
@@ -24,28 +22,12 @@ namespace NZWalk.API.Controllers
         public async Task<IActionResult> GetAllRegions()
         {
             var regions = await regionRepo.GetAllAsync();
-
-            //return DTO Region
-            //var regionsDTO = new List<Models.DTO.Region>();
-            //regions.ToList().ForEach(region =>
-            //{
-            //    var regionDTO = new Models.DTO.Region()
-            //    {
-            //        Id = region.Id,
-            //        Code = region.Code,
-            //        Name = region.Name,
-            //        Area = region.Area,
-            //        Lat= region.Lat,
-            //        Long= region.Long,
-            //        Population= region.Population,
-            //    };
-            //    regionsDTO.Add(regionDTO);
-            //});
-
+            
             var regionsDTO = mapper.Map<List<Models.DTO.Region>>(regions);
 
             return Ok(regionsDTO);
         }
+
         [HttpGet]
         [Route("{id:Guid}")]
         [ActionName("GetRegionAsync")]
@@ -56,6 +38,7 @@ namespace NZWalk.API.Controllers
             var regionDTO = mapper.Map<Models.DTO.Region>(region);
             return Ok(regionDTO);
         }
+
         [HttpPost]
         public async Task<IActionResult> AddRegionAsync(Models.DTO.AddRegionRequest addRegion)
         {
@@ -92,6 +75,7 @@ namespace NZWalk.API.Controllers
             //return CreatedAtAction(nameof(GetRegionAsync), new { id = regionDTO.Id },regionDTO);
             return Ok("Created");
         }
+
         [HttpDelete]
         [Route("Delete/{id:Guid}")]
         public async Task<IActionResult> DeleteRegionAsync(Guid id)
