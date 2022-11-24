@@ -19,6 +19,7 @@ namespace NZWalk.API.Controllers
 
 
         [HttpGet]
+        [Route("GetAllRegions")]
         public async Task<IActionResult> GetAllRegions()
         {
             var regions = await regionRepo.GetAllAsync();
@@ -29,7 +30,7 @@ namespace NZWalk.API.Controllers
         }
 
         [HttpGet]
-        [Route("{id:Guid}")]
+        [Route("GetRegionById")]
         [ActionName("GetRegionAsync")]
         public async Task<IActionResult> GetRegionAsync(Guid id)
         {
@@ -40,6 +41,7 @@ namespace NZWalk.API.Controllers
         }
 
         [HttpPost]
+        [Route("InsertRegion")]
         public async Task<IActionResult> AddRegionAsync(Models.DTO.AddRegionRequest addRegion)
         {
             //Request(DTO) to domain model
@@ -77,7 +79,7 @@ namespace NZWalk.API.Controllers
         }
 
         [HttpDelete]
-        [Route("Delete/{id:Guid}")]
+        [Route("DeleteRegion/{id:Guid}")]
         public async Task<IActionResult> DeleteRegionAsync(Guid id)
         {
             //get region by id 
@@ -100,7 +102,7 @@ namespace NZWalk.API.Controllers
         }
 
         [HttpPut]
-        [Route("Update/{id:Guid}")]
+        [Route("UpdateRegion/{id:Guid}")]
         public async Task<IActionResult> UpdateRegionAsync([FromRoute]Guid id,[FromBody] Models.DTO.UpdateRegionRequest updateRegionRequest)
         {
             //DTO as domain model

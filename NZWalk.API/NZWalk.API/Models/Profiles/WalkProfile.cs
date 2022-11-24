@@ -11,6 +11,9 @@ namespace NZWalk.API.Models.Profiles
 
             CreateMap<Models.Domain.WalkDifficulty, Models.DTO.WalkDifficulty>()
                 .ReverseMap();
+
+            CreateMap<Models.Domain.Walk, Models.DTO.AddWalkRequest>()
+                .ReverseMap();
         }
     }
 }
