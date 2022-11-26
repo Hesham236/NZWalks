@@ -103,7 +103,8 @@ namespace NZWalk.API.Controllers
 
         [HttpPut]
         [Route("UpdateRegion/{id:Guid}")]
-        public async Task<IActionResult> UpdateRegionAsync([FromRoute]Guid id,[FromBody] Models.DTO.UpdateRegionRequest updateRegionRequest)
+        public async Task<IActionResult> UpdateRegionAsync([FromRoute]Guid id,
+            [FromBody] Models.DTO.UpdateRegionRequest updateRegionRequest)
         {
             //DTO as domain model
             var region = new Models.Domain.Region()
