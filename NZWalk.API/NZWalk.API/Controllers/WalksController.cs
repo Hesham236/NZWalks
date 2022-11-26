@@ -16,7 +16,8 @@ namespace NZWalk.API.Controllers
         private readonly IRegionRepo regionRepo;
         private readonly IWalkDifficultyRepo walkDifficultyRepo;
 
-        public WalksController(IWalkRepo walkRepo,IMapper mapper,IRegionRepo regionRepo,IWalkDifficultyRepo walkDifficultyRepo)
+        public WalksController(IWalkRepo walkRepo,IMapper mapper,
+            IRegionRepo regionRepo,IWalkDifficultyRepo walkDifficultyRepo)
         {
             this.walkRepo = walkRepo;
             this.mapper = mapper;

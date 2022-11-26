@@ -40,6 +40,12 @@ namespace NZWalk.API.Controllers
         [Route("AddWalkDifficulty")]
         public async Task<IActionResult> AddWalkDifficulty([FromBody] Models.DTO.WalkDifficulty walkDifficulty)
         {
+            //Validation For add walk difficulty
+            if(!AddWalkDifficultyValidation(walkDifficulty))
+            {
+                return BadRequest(ModelState);
+            }
+
             var wdDomain = new Models.Domain.WalkDifficulty { Code = walkDifficulty.Code, };
             
 
@@ -55,6 +61,11 @@ namespace NZWalk.API.Controllers
         public async Task<IActionResult> UpdateWalkDifficultyAsync([FromRoute] Guid id,
             [FromBody] Models.DTO.UpdateWalkDifficultyRequest updatewalkDifficulty)
         {
+            //Validation for update
+            if (!UpdateWalkDifficultyValidaion(updatewalkDifficulty))
+            {
+                return BadRequest(ModelState);
+            }
             var wdDomain = new Models.Domain.WalkDifficulty()
             {
                 Code = updatewalkDifficulty.Code,
@@ -92,5 +103,32 @@ namespace NZWalk.API.Controllers
             var wdDTO = mapper.Map<Models.DTO.WalkDifficulty> (wdDomain);
             return Ok(wdDTO);
         }
+
+        #region Private Validation
+
+        private bool AddWalkDifficultyValidation(Models.DTO.WalkDifficulty walkDifficulty)
+        {
+            if (string.IsNullOrWhiteSpace(walkDifficulty.Code))
+            {
+                ModelState.AddModelError(nameof(walkDifficulty.Code), $"cannot be white spaced or empty");
+                return false;
+            }
+
+            if (ModelState.Count > 0) return false;
+            return true;
+        }
+
+        private bool UpdateWalkDifficultyValidaion(Models.DTO.UpdateWalkDifficultyRequest updatewalkDifficulty)
+        {
+            if(string.IsNullOrWhiteSpace(updatewalkDifficulty.Code)) 
+            {
+                ModelState.AddModelError(nameof(updatewalkDifficulty.Code), $"Cannot be white spaced or empty");
+                return false;
+            }
+            if(ModelState.Count > 0) return false;
+
+            return true;
+        }
+        #endregion
     }
 }

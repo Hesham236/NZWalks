@@ -24,7 +24,7 @@ namespace NZWalk.API.Controllers
         public async Task<IActionResult> GetAllRegions()
         {
             var regions = await regionRepo.GetAllAsync();
-            
+
             var regionsDTO = mapper.Map<List<Models.DTO.Region>>(regions);
 
             return Ok(regionsDTO);
@@ -36,7 +36,7 @@ namespace NZWalk.API.Controllers
         public async Task<IActionResult> GetRegionAsync(Guid id)
         {
             var region = await regionRepo.GetAsync(id);
-            if(region== null) return NotFound();
+            if (region == null) return NotFound();
             var regionDTO = mapper.Map<Models.DTO.Region>(region);
             return Ok(regionDTO);
         }
@@ -49,7 +49,7 @@ namespace NZWalk.API.Controllers
 
             //validation
 
-            if(!AddRegionValidation(addRegion))
+            if (!AddRegionValidation(addRegion))
             {
                 return BadRequest(ModelState);
             }
@@ -60,7 +60,7 @@ namespace NZWalk.API.Controllers
             {
                 Code = addRegion.Code,
                 Name = addRegion.Name,
-                Area= addRegion.Area,
+                Area = addRegion.Area,
                 Long = addRegion.Long,
                 Lat = addRegion.Lat,
                 Population = addRegion.Population,
@@ -95,7 +95,7 @@ namespace NZWalk.API.Controllers
             //get region by id 
             var region = await regionRepo.DeleteRegionAsync(id);
             //if null not found
-            if(region == null) return NotFound();
+            if (region == null) return NotFound();
             //convert response back to dto
             var regionDTO = new Models.DTO.Region()
             {
@@ -114,12 +114,12 @@ namespace NZWalk.API.Controllers
         [EnableCors]
         [HttpPut]
         [Route("UpdateRegion/{id:Guid}")]
-        public async Task<IActionResult> UpdateRegionAsync([FromRoute]Guid id,
+        public async Task<IActionResult> UpdateRegionAsync([FromRoute] Guid id,
             [FromBody] Models.DTO.UpdateRegionRequest updateRegionRequest)
         {
 
             // validation for update
-            if(!UpdateRegionValidation(updateRegionRequest))
+            if (!UpdateRegionValidation(updateRegionRequest))
             {
                 return BadRequest(ModelState);
             }
@@ -135,7 +135,7 @@ namespace NZWalk.API.Controllers
                 Population = updateRegionRequest.Population,
             };
             //if null not found
-            if(region == null) return NotFound();
+            if (region == null) return NotFound();
             //update using repo
             region = await regionRepo.UpdateRegionAsync(id, region);
 
@@ -151,7 +151,7 @@ namespace NZWalk.API.Controllers
                 Lat = region.Lat,
                 Population = region.Population,
 
-            }; 
+            };
             //response ok
             return Ok("Region Updated");
 
@@ -159,19 +159,16 @@ namespace NZWalk.API.Controllers
 
 
 
-
-
-
         #region private Region
         private bool AddRegionValidation(Models.DTO.AddRegionRequest addRegion)
         {
-            if(addRegion == null)
+            if (addRegion == null)
             {
                 ModelState.AddModelError(nameof(addRegion),
                     $"Add Region Data is required");
                 return false;
             }
-            if(string.IsNullOrWhiteSpace(addRegion.Code)) 
+            if (string.IsNullOrWhiteSpace(addRegion.Code))
             {
                 ModelState.AddModelError(nameof(addRegion.Code),
                     $"{nameof(addRegion.Code)} cannot be null or empty or white spaced.");
@@ -204,7 +201,7 @@ namespace NZWalk.API.Controllers
 
 
             if (ModelState.Count > 0) return false;
-            
+
             return true;
 
         }
