@@ -82,5 +82,15 @@ namespace NZWalk.API.Controllers
             var wdDTO = mapper.Map<Models.DTO.WalkDifficulty>(deletewalk);
             return Ok("WalkDifficulty Deleted");
         }
+
+        [HttpGet]
+        [Route("GetWalkDiffByName")]
+        public async Task<IActionResult> GetWalkDiffByName(string code)
+        {
+            var wdDomain = await walkDifficultyRepo.GetByNameAsync(code);
+            if (wdDomain == null) return NotFound();
+            var wdDTO = mapper.Map<Models.DTO.WalkDifficulty> (wdDomain);
+            return Ok(wdDTO);
+        }
     }
 }

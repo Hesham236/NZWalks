@@ -53,5 +53,10 @@ namespace NZWalk.API.Reposaitories
             return exWd;
 
         }
+
+        public async Task<WalkDifficulty> GetByNameAsync(string code)
+        {
+            return await nZWalksDBContext.WalkDifficultyud.FirstOrDefaultAsync(x => x.Code == code);
+        }
     }
 }

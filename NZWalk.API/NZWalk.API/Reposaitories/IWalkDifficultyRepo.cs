@@ -9,5 +9,6 @@ namespace NZWalk.API.Reposaitories
         Task<WalkDifficulty> AddWalkDifficultyAsync(WalkDifficulty walkDifficulty);
         Task<WalkDifficulty> UpdateWalkDifficultyAsync(Guid id,WalkDifficulty walkDifficulty);
         Task<WalkDifficulty> DeleteWalkDifficultyAsync(Guid id);
+        Task<WalkDifficulty> GetByNameAsync(string code);
     }
 }
