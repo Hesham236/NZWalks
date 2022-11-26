@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using NZWalk.API.Models.DTO;
 using NZWalk.API.Reposaitories;
 
 namespace NZWalk.API.Controllers
@@ -16,25 +14,25 @@ namespace NZWalk.API.Controllers
         private readonly IRegionRepo regionRepo;
         private readonly IWalkDifficultyRepo walkDifficultyRepo;
 
-        public WalksController(IWalkRepo walkRepo,IMapper mapper,
-            IRegionRepo regionRepo,IWalkDifficultyRepo walkDifficultyRepo)
+        public WalksController(IWalkRepo walkRepo, IMapper mapper,
+            IRegionRepo regionRepo, IWalkDifficultyRepo walkDifficultyRepo)
         {
             this.walkRepo = walkRepo;
             this.mapper = mapper;
             this.regionRepo = regionRepo;
             this.walkDifficultyRepo = walkDifficultyRepo;
         }
-        
+
         [HttpGet]
         [Route("GetAllWalks")]
         public async Task<IActionResult> GetAllWalksAsync()
         {
-           //fetch domain walk
-           var walkdomain = await walkRepo.GetAllAsync();
-           // map to wald DTO
-           var walkDTO = mapper.Map<List<Models.DTO.Walk>>(walkdomain);
-           //return response
-           return Ok(walkDTO);
+            //fetch domain walk
+            var walkdomain = await walkRepo.GetAllAsync();
+            // map to wald DTO
+            var walkDTO = mapper.Map<List<Models.DTO.Walk>>(walkdomain);
+            //return response
+            return Ok(walkDTO);
         }
         [HttpGet]
         [Route("GetWalkById/{id:Guid}")]
@@ -53,7 +51,7 @@ namespace NZWalk.API.Controllers
         {
 
             //validation on add walk
-            if(!(await AddWalkValidation(addWalkRequest)))
+            if (!(await AddWalkValidation(addWalkRequest)))
             {
                 return BadRequest(ModelState);
             }
@@ -62,9 +60,9 @@ namespace NZWalk.API.Controllers
             var walkdomain = new Models.Domain.Walk
             {
                 Length = addWalkRequest.Length,
-                Name= addWalkRequest.Name,
-                RegionId=addWalkRequest.RegionId,
-                WalkDifficultyId=addWalkRequest.WalkDifficultyId,
+                Name = addWalkRequest.Name,
+                RegionId = addWalkRequest.RegionId,
+                WalkDifficultyId = addWalkRequest.WalkDifficultyId,
             };
 
             //pass domain object to repo
@@ -86,7 +84,7 @@ namespace NZWalk.API.Controllers
         public async Task<IActionResult> DeleteWalkAsync(Guid id)
         {
             var deletedwalk = await walkRepo.DeleteWalkAsync(id);
-            if(deletedwalk == null) return NotFound();
+            if (deletedwalk == null) return NotFound();
             var walkDTO = mapper.Map<Models.DTO.Walk>(deletedwalk);
             return Ok("Walk Deleted");
         }
@@ -98,12 +96,12 @@ namespace NZWalk.API.Controllers
         {
 
             //validation on update
-            if(!(await UpdateWalkValidation(updateWalkRequest)))
+            if (!(await UpdateWalkValidation(updateWalkRequest)))
             {
                 return BadRequest(ModelState);
             }
             //Convert DTO To Domain Object
-            var walkdomain = new Models.Domain.Walk 
+            var walkdomain = new Models.Domain.Walk
             {
                 Length = updateWalkRequest.Length,
                 Name = updateWalkRequest.Name,
@@ -113,17 +111,17 @@ namespace NZWalk.API.Controllers
             //pass details to repo - get domain object in response 
             walkdomain = await walkRepo.UpdateWalkAsync(id, walkdomain);
             //handle null not found
-            if(walkdomain == null) return NotFound();
+            if (walkdomain == null) return NotFound();
             else
             {
                 //convert back to dto
                 var walkDTO = new Models.DTO.Walk
                 {
                     Id = walkdomain.Id,
-                    Length= walkdomain.Length,
+                    Length = walkdomain.Length,
                     Name = walkdomain.Name,
                     RegionId = walkdomain.RegionId,
-                    WalkDifficultyId= walkdomain.WalkDifficultyId,
+                    WalkDifficultyId = walkdomain.WalkDifficultyId,
                 };
             }
             //return response
@@ -153,13 +151,13 @@ namespace NZWalk.API.Controllers
                     $"{nameof(addWalkRequest.Name)} cannot be null or empty or white spaced.");
             }
             var region = await regionRepo.GetAsync(addWalkRequest.RegionId);
-            if (region == null) 
+            if (region == null)
             {
                 ModelState.AddModelError(nameof(addWalkRequest.RegionId),
                     $"{nameof(addWalkRequest.RegionId)} is not avaialble.");
             }
             var walkDiff = await walkDifficultyRepo.GetByIdAsync(addWalkRequest.WalkDifficultyId);
-            if(walkDiff == null)
+            if (walkDiff == null)
             {
                 ModelState.AddModelError(nameof(addWalkRequest.WalkDifficultyId),
                     $"{nameof(addWalkRequest.WalkDifficultyId)} is not avaialble.");
@@ -201,7 +199,7 @@ namespace NZWalk.API.Controllers
                 ModelState.AddModelError(nameof(updateWalkRequest.WalkDifficultyId),
                     $"{nameof(updateWalkRequest.WalkDifficultyId)} is not avaialble.");
             }
-            
+
             if (ModelState.Count > 0) return false;
 
             return true;
