@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using NZWalk.API.Reposaitories;
@@ -7,6 +8,7 @@ namespace NZWalk.API.Controllers
 {
     [ApiController]
     [Route("Regions")]
+    
     public class RegionsController : Controller
     {
         private readonly IRegionRepo regionRepo;
@@ -21,6 +23,7 @@ namespace NZWalk.API.Controllers
 
         [HttpGet]
         [Route("GetAllRegions")]
+        [Authorize(Roles = "reader")]
         public async Task<IActionResult> GetAllRegions()
         {
             var regions = await regionRepo.GetAllAsync();
@@ -30,9 +33,9 @@ namespace NZWalk.API.Controllers
             return Ok(regionsDTO);
         }
 
-        [HttpGet]
-        [Route("GetRegionById")]
+        [HttpGet("GetRegionById")]
         [ActionName("GetRegionAsync")]
+        [Authorize(Roles = "reader")]
         public async Task<IActionResult> GetRegionAsync(Guid id)
         {
             var region = await regionRepo.GetAsync(id);
@@ -42,8 +45,8 @@ namespace NZWalk.API.Controllers
         }
 
         [EnableCors]
-        [HttpPost]
-        [Route("InsertRegion")]
+        [HttpPost("InsertRegion")]
+        [Authorize(Roles = "writer" )]
         public async Task<IActionResult> AddRegionAsync(Models.DTO.AddRegionRequest addRegion)
         {
 
@@ -88,8 +91,8 @@ namespace NZWalk.API.Controllers
             return Ok("Created");
         }
 
-        [HttpDelete]
-        [Route("DeleteRegion/{id:Guid}")]
+        [HttpDelete("DeleteRegion/{id:Guid}")]
+        [Authorize]
         public async Task<IActionResult> DeleteRegionAsync(Guid id)
         {
             //get region by id 
@@ -112,8 +115,8 @@ namespace NZWalk.API.Controllers
         }
 
         [EnableCors]
-        [HttpPut]
-        [Route("UpdateRegion/{id:Guid}")]
+        [HttpPut("UpdateRegion/{id:Guid}")]
+        [Authorize(Roles = "writer")]
         public async Task<IActionResult> UpdateRegionAsync([FromRoute] Guid id,
             [FromBody] Models.DTO.UpdateRegionRequest updateRegionRequest)
         {
